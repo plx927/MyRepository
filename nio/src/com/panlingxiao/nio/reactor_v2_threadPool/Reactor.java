@@ -21,13 +21,13 @@ public class Reactor implements Runnable{
     private Selector selector;
     private ServerSocketChannel serverSocketChannel;
 
-    public Reactor(){
+    public Reactor() {
         try {
             selector = Selector.open();
             serverSocketChannel = ServerSocketChannel.open();
             serverSocketChannel.configureBlocking(false);
             serverSocketChannel.bind(new InetSocketAddress(8080));
-            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, new Acceptor(serverSocketChannel,selector));
+            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, new Acceptor(serverSocketChannel, selector));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -35,12 +35,15 @@ public class Reactor implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("服务器启动成功!");
         Set<SelectionKey> set = null;
         for(;;){
             try {
                 selector.select();
                 set =  selector.selectedKeys();
                 for(Iterator<SelectionKey> iterator = set.iterator();iterator.hasNext();){
+                    SelectionKey key = iterator.next();
+                    dispatch(key);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -49,6 +52,13 @@ public class Reactor implements Runnable{
                     set.clear();
                 }
             }
+        }
+    }
+
+    private void  dispatch(SelectionKey key){
+        Runnable runnable = (Runnable) key.attachment();
+        if(runnable != null){
+            runnable.run();
         }
 
     }

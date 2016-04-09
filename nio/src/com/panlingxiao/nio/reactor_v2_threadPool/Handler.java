@@ -35,26 +35,27 @@ public class Handler implements Runnable {
 
     private static final Pattern END_PATTERN = Pattern.compile(".+([\r\n]|\r\n)$");
 
-    private static Executor threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    private int state = READING;
+    //获取到CPU的核数，根据核心创建相应的线程
+    private static final int N_CPU = Runtime.getRuntime().availableProcessors();
+    private static Executor threadPool = Executors.newFixedThreadPool(N_CPU);
 
-    public Handler(SocketChannel socketChannel, Selector selector) {
-        try {
-            this.channel = socketChannel;
-            this.selector = selector;
-            socketChannel.configureBlocking(false);
-            key = socketChannel.register(selector, SelectionKey.OP_READ, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Handler(SocketChannel socketChannel, Selector selector) throws IOException{
+        this.channel = socketChannel;
+        this.selector = selector;
+        //当获取连接后，如果客户端突然断开连接,那么设置非阻塞操作会抛异常
+        socketChannel.configureBlocking(false);
+        key = socketChannel.register(selector, SelectionKey.OP_READ, this);
     }
 
     @Override
     public void run() {
         try {
-            if (READING == state) {
-                read();
+            read();
+            Sender sender = null;
+            //迭代写任务的队列，如果有对应的写任务队列,则执行写操作
+            while (null != (sender = taskQueue.poll())) {
+                sender.send();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,11 +64,13 @@ public class Handler implements Runnable {
 
     private void read() throws IOException {
         if (key.isValid()) {
+            //在读取的时候客户端可能已经关闭了连接
             int n = channel.read(byteBuffer);
             //客户端关闭连接
-            if (END == -1) {
+            if (END == n) {
                 key.cancel();
                 channel.close();
+                System.out.println("客户端关闭了连接");
             } else if (n > 0 && isComplete()) {
                 //防止多个线程对读取的ByteBuffer进行并发操作
                 byteBuffer.flip();
@@ -75,8 +78,11 @@ public class Handler implements Runnable {
                 ByteBuffer copyBuffer = ByteBuffer.allocate(byteBuffer.limit());
                 copyBuffer.put(byteBuffer);
 
+                //将positio设置为0,默认情况下positon==limit
+                copyBuffer.position(0);
+
                 //异步提交业务处理任务
-                threadPool.execute(new BusinessProcessor(copyBuffer));
+                threadPool.execute(new BusinessProcessor(copyBuffer,channel,key));
 
                 //清空ByteBuffer,用于下一次继续读取
                 byteBuffer.clear();
@@ -97,39 +103,69 @@ public class Handler implements Runnable {
         return END_PATTERN.matcher(msg).matches();
     }
 
-    class Sender {
-
-        private ByteBuffer writeBuffer;
-
-        public Sender(ByteBuffer writeBuffer) {
-            this.writeBuffer = writeBuffer;
-        }
-
-        public void send() throws IOException {
-            if (key.isValid()) {
-                channel.write(writeBuffer);
-            }
-        }
-    }
 
     /**
      * 业务处理任务
      */
     class BusinessProcessor implements Runnable {
 
+        private final SocketChannel channel;
         private ByteBuffer copyBuffer;
+        private SelectionKey key;
 
-        public BusinessProcessor(ByteBuffer copyBuffer) {
+        public BusinessProcessor(ByteBuffer copyBuffer,SocketChannel channel,SelectionKey key) {
             this.copyBuffer = copyBuffer;
+            this.channel = channel;
+            this.key = key;
         }
 
         @Override
         public void run() {
             byte[] array = copyBuffer.array();
-            int position = copyBuffer.position();
+            int position = copyBuffer.limit();
             String msg = new String(array, 0, position);
             System.out.printf("服务器收到了:" + msg);
-            taskQueue.offer(new Sender(copyBuffer));
+            taskQueue.offer(new Sender(copyBuffer, channel,key));
+
+            /*
+             * 如果select在wakeup之后发生,则会导致当前写处理被延迟到下一次进行
+             * 因此将该Selection添加一个写事件，保证能够有写事件发生
+             */
+            int ops = key.interestOps();
+            key.interestOps(ops | SelectionKey.OP_WRITE);
+            selector.wakeup();
+        }
+    }
+
+    class Sender {
+
+        private ByteBuffer writeBuffer;
+        private SocketChannel channel;
+        private SelectionKey key;
+
+        public Sender(ByteBuffer writeBuffer,SocketChannel channel,SelectionKey key) {
+            this.writeBuffer = writeBuffer;
+            this.channel = channel;
+            this.key = key;
+        }
+
+        public void send(){
+            try {
+                if (key.isValid()) {
+                    channel.write(writeBuffer);
+                    key.interestOps(SelectionKey.OP_READ);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("发送数据失败");
+                key.cancel();
+                try {
+                    channel.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
         }
     }
 

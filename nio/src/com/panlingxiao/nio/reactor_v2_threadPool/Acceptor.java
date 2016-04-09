@@ -23,13 +23,22 @@ public class Acceptor implements  Runnable {
 
     @Override
     public void run() {
+        SocketChannel socketChannel = null;
         try {
-            SocketChannel socketChannel = serverSocketChannel.accept();
+            socketChannel = serverSocketChannel.accept();
             if(socketChannel != null) {
                 new Handler(socketChannel, selector);
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("获取客户端连接失败");
+            try {
+                if(socketChannel != null){
+                    socketChannel.close();
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }
