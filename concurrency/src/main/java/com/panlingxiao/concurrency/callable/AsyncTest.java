@@ -7,12 +7,12 @@ import java.util.concurrent.*;
  * <p/>
  * 通过Callable实现一个异步处理的功能
  */
-public class AsyncByCallable<T> implements  Runnable{
+public class AsyncTest<T> implements  Runnable{
 
     static ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public static void main(String[] args) throws InterruptedException {
-        final AsyncByCallable<Integer> aysnc = new AsyncByCallable<Integer>(new MyCallable(1,2),new MyCallback());
+        final AsyncTest<Integer> aysnc = new AsyncTest<Integer>(new MyCallable(1,2),new MyCallback());
         aysnc.call().sync();
         System.out.println("执行代码");
     }
@@ -21,12 +21,12 @@ public class AsyncByCallable<T> implements  Runnable{
     private Callback<T> callback;
     private CountDownLatch countDownLatch;
 
-    public AsyncByCallable(Callable<T> task, Callback<T> callback) {
+    public AsyncTest(Callable<T> task, Callback<T> callback) {
         this.task = task;
         this.callback = callback;
     }
 
-    public AsyncByCallable call(){
+    public AsyncTest call(){
         new Thread(this).start();
         return this;
     }
