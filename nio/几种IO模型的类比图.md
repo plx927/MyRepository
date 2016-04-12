@@ -60,6 +60,19 @@ Reactor thread。
 数据可以正常发送，并且在发送完成后下一次select的时候，依然会产生读事件，而在这次读取的时候就会发送IOException。
 - Channel的read方法是在ReadableByteChannel接口中所定义。
 - 服务器端一次性读取数据的大小只取决于ByteBuffer的大小，然后发送的数据大于ByteBuffer的所能存储的大小，那么会在一下次select方法中继续产生IO事件，继续读取。
-- 
+
+
+### 6. cas VS lock
+在正常情况下，使用cas的乐观并发控制的效率要高于lock的悲观并发控制。其原因在于当一个线程被OS所挂起后，重新进入RUNNABLE状态，需要耗费大约30W的时钟周期；而如果
+使用cas操作，当执行并不复杂的情况，它反复操作耗费的时钟周期将要远远小于线程挂起到恢复状态所经历的时间。
+但是在CPU工作忙碌的情况下，比如服务器正在处理大量的请求，此时又希望往队列中添加新的任务，如果使用无锁的并发队列(ConcurrentLinkedQueue)，将所造成的效能响应反而会
+比BlokckingLinkedQueue要来得差；其原因在于CPU本身工作已经繁忙，又希望其分出时间来执行大量反复无效的操作，反而对CPU性能开销来得更大；还有最重要的一点是，由于CPU本身
+处于忙碌的情况，即使把任务添加进来也无法立马得到执行，因此BlockingLinkedQueue是更加适合用于做缓冲的队列。
+所以JDK的ThreadPoolExecutor底层使用的是阻塞队列来作为任务的队列，而没有使用一个普通的Queue作为任务队列。
+
+
+
+
+
 
 
