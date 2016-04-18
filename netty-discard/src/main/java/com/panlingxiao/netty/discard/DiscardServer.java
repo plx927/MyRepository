@@ -62,7 +62,7 @@ public class DiscardServer {
                        * 其用于帮助用户配置新连接进行的Channel。
                        *  It is most likely that you want to configure the ChannelPipeline of the new Channel
                        *  by adding some handlers such as DiscardServerHandler to implement your network application
-                、。       *  上面的这句话说明每一个Channel都有其对应的ChannelPipeline
+                       *  上面的这句话说明每一个Channel都有其对应的ChannelPipeline
                        *
                        */
                     .childHandler(new ChannelInitializer<SocketChannel>() {
