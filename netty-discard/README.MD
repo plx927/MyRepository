@@ -46,3 +46,7 @@ ChannelHandler provides various event handler methods that you can override
 ## option()和childOption()的区别
 >Did you notice option() and childOption()? option() is for the NioServerSocketChannel that accepts incoming connections. childOption() is for the Channels accepted by the parent ServerChannel,
 which is NioServerSocketChannel in this case.
+
+## Channel与ChannelFutrue的关系
+
+## ChannelPromise与ChannelFutrue的关系
