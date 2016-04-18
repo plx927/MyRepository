@@ -108,6 +108,11 @@ EventLoop理解成一个Worker线程，因此其底层理论上应该维护着�
 看到这里，先用一张简单的结构图表示一下上面4个接口的层级关系和作用。
 ![理理思路](http://note.youdao.com/yws/public/resource/8558177f0b51dc6892d711b3133de99e/D7EFFF6734F647E3BD0025F4E6EA45D9)
 
+
+### EventLoop vs EventExecutor
+EventLoop除了包含EventExecutor之外，它还具备注册Channel与处理IO事件的功能。
+
+
 看了这么多接口，能不能看点实现类?
 ## MultithreadEventExecutorGroup
 它是一个EventExecutorGroup的抽象实现,即可以对EventExecutor进行管理，并且还可以对任务进行调度执行可以使用多线程来调用EventExecutor来处理任务;
@@ -330,8 +335,48 @@ How many Threads are used and how they are mapped to the created Channels depend
     
 ```
  
+### SingleThreadEventExecutor 
+EventExecutor的抽象实现，通过将所有提交的任务在一个线程中执行处理。
+```
+    //底层维护着当前的线程
+    private volatile Thread thread;
+    
+    
+    //判断当前线程是在EventLoop中执行
+    @Override
+    public boolean inEventLoop(Thread thread) {
+        return thread == this.thread;
+    }
+    
+    /**
+     * @param parent            设置EventExecutorGroup为当前EventExecutor的parent
+     * @param executor          设置线程池用于执行任务队列
+     * @param addTaskWakesUp    当为true时，任务被添加队列中后会唤醒执行的线程
+     *                         
+     */
+    protected SingleThreadEventExecutor(EventExecutorGroup parent, Executor executor, boolean addTaskWakesUp) {
+        super(parent);
+
+        if (executor == null) {
+            throw new NullPointerException("executor");
+        }
+
+        this.addTaskWakesUp = addTaskWakesUp;
+        this.executor = executor;
+        taskQueue = newTaskQueue();
+    }
+
+```
+
+
+
+
+
 ### SingleThreadEventLoop
 EventLoop的抽象实现，通过将所有提交的任务在一个线程中执行处理。 
+ 
+  
+  
   
 ### NioEventLoop
 基于Nio的单线程的EventLoop的实现，将客户端的Channel注册到其底层维护的Selector中，然后通过事件循环处理在多路复用器中发生的IO事件。
@@ -482,11 +527,8 @@ EventLoop的抽象实现，通过将所有提交的任务在一个线程中执�
     
             scheduleExecution();
         }
-    
-    
-    
-    
 ```
+
 在EventLoop中定义了一个asInvoker()方法,通过返回一个ChannelHandlerInvoker，然后在EventLoop中执行通过ChannelHandlerInvoker执行ChannleHandler中的IO事件方法。
 NioEventLoop中的ChannelHandlerInvokder是从SingleThreadEventLoop中继承而来，其所使用的是DefaultChannelHandlerInvoker。
 

@@ -8,7 +8,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 public class NioEventLoopTest {
 
     public static void main(String[] args) {
+
         NioEventLoopGroup boss = new NioEventLoopGroup();
-        System.out.println(boss);
+
+        boss.execute(new Runnable() {
+            public void run() {
+                System.out.println("hello world!");
+            }
+        });
+
+        boss.shutdownGracefully();
     }
 }
