@@ -13,7 +13,7 @@ public class AsyncTest<T> implements  Runnable{
 
     public static void main(String[] args) throws InterruptedException {
         final AsyncTest<Integer> aysnc = new AsyncTest<Integer>(new MyCallable(1,2),new MyCallback());
-        aysnc.call().sync();
+        aysnc.call();
         System.out.println("执行代码");
     }
 
