@@ -22,9 +22,21 @@ public class DiscardServer {
         /*
          * NioEventLoopGroup:multithreaded event loop that handles I/O operation
          * Netty官方给出的这句话对于初学者是很难理解的。
+         *
+         * EventLoop是用于处理在Selector中注册的Channel的IO事件。
          */
 
-        //用于接受客户端的连接,可以简单的理解成MainReactor
+        /*
+         * 最初的理解:用于接受客户端的连接,可以简单的理解成MainReactor
+         *
+         * 源码分析的理解:创建CPU核数*2个NioEventLoop，同时创建默认的Executor和默认的SelectorProvider。
+         * 默认的SelectorProvider是系统所提供的，有sun.nio.ch.DefaultSelectorProvider来创建。
+         *
+         *  对于完整的NioEventLoopGroup的构造方法的参数列表如下:
+         *  public NioEventLoopGroup(int nEventLoops, Executor executor, final SelectorProvider selectorProvider) {
+         *       super(nEventLoops, executor, selectorProvider);
+         *   }
+         */
         NioEventLoopGroup boosGroup = new NioEventLoopGroup();
 
         /*
@@ -50,7 +62,7 @@ public class DiscardServer {
                        * 其用于帮助用户配置新连接进行的Channel。
                        *  It is most likely that you want to configure the ChannelPipeline of the new Channel
                        *  by adding some handlers such as DiscardServerHandler to implement your network application
-                       *  上面的这句话说明每一个Channel都有其对应的ChannelPipeline
+                、。       *  上面的这句话说明每一个Channel都有其对应的ChannelPipeline
                        *
                        */
                     .childHandler(new ChannelInitializer<SocketChannel>() {
