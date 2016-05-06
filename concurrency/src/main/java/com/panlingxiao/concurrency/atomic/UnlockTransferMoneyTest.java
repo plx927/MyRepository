@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
 /**
  * Created by panlingxiao on 2016/5/6.
- * ÊµÏÖÎŞËø×ªÕË
+ *
  */
 public class UnlockTransferMoneyTest {
 
@@ -13,14 +13,13 @@ public class UnlockTransferMoneyTest {
         public void transfer(Account src,Account dest,long money){
             final long balance = src.getBlance();
             if(balance>=money){
-                //Ö´ĞĞCAS²Ù×÷,µ±ÇÒ½öµ±A³É¹¦¸üĞÂ¿ÛÇ®,²ÅÊµÏÖBµÄÕË»§¼ÓÇ®²Ù×÷,Ô­×Ó²Ù×÷£¬Ö»ÓĞÒ»¸öÏß³ÌÄÜ¹»Ö´ĞĞ³É¹¦
                 if(src.decrMoney(balance,balance-money)){
                     dest.incrMoney(money);
                 }else{
                     transfer(src,dest,money);
                 }
             }else{
-                System.out.println(String.format("%sÕË»§Óà¶î²»×ã,µ±Ç°Óà¶îÎª:%d",src.getId(),src.getBlance()));
+                System.out.println(String.format("%sè´¦å·ä½™é¢ä¸è¶³ï¼Œä½™é¢ä¸º:%d",src.getId(),src.getBlance()));
             }
         }
     }
@@ -36,7 +35,7 @@ public class UnlockTransferMoneyTest {
             this.balance = balance;
         }
 
-        //·µ»ØÕË»§µÄÓà¶î
+        //è¿”å›å½“å‰è´¦æˆ·çš„ä½™é¢
         public long getBlance(){
             return balance;
         }
