@@ -19,9 +19,9 @@ public class TestDataBinder {
 
 
     /**
-     * DataBinderÍê³ÉÕæÕıÊı¾İ°ó¶¨µÄÊÇBeanWrapper
+     * DataBinderå®ŒæˆçœŸæ­£æ•°æ®ç»‘å®šçš„æ˜¯BeanWrapper
      *
-     * The BeanWrapper usually isn¡¯t used by application code directly,
+     * The BeanWrapper usually isnâ€™t used by application code directly,
      * but by the DataBinder and the BeanFactory.
      *
      */
@@ -30,7 +30,7 @@ public class TestDataBinder {
         Person person = new Person();
         DataBinder dataBinder = new DataBinder(person);
 
-        //ÉèÖÃ¶ÔÓÚÎ´ÖªµÄÊôĞÔÊÇ·ñ½øĞĞºöÂÔ²Ù×÷
+        //è®¾ç½®å¯¹äºæœªçŸ¥çš„å±æ€§æ˜¯å¦è¿›è¡Œå¿½ç•¥æ“ä½œ
         //dataBinder.setIgnoreUnknownFields(false);
 
         MutablePropertyValues pvs = new MutablePropertyValues();
@@ -50,7 +50,7 @@ public class TestDataBinder {
 
 
     /**
-     * ÔÚSpring3.xÖĞ£¬ËùÓĞµÄ¾ßÌåÊµÏÖ¶¼ÓÉBeanWrapperÀ´Íê³É,ÔÚSpring4.2ºó£¬ĞÂÒıÈëÁËAbstractNestablePropertyAccessor
+     * åœ¨Spring3.xä¸­ï¼Œæ‰€æœ‰çš„å…·ä½“å®ç°éƒ½ç”±BeanWrapperæ¥å®Œæˆ,åœ¨Spring4.2åï¼Œæ–°å¼•å…¥äº†AbstractNestablePropertyAccessor
      *
      */
     @Test
@@ -62,7 +62,7 @@ public class TestDataBinder {
         Assert.assertEquals("hello", customer.getFirstName());
         Assert.assertEquals("world", customer.getSurname());
 
-        //ÉèÖÃ×Ô¶¯´´½¨¶ÔÏóÊôĞÔ£¬·ñÔò»áÒı·¢NullValueInNestedPathException
+        //è®¾ç½®è‡ªåŠ¨åˆ›å»ºå¯¹è±¡å±æ€§ï¼Œå¦åˆ™ä¼šå¼•å‘NullValueInNestedPathException
         wrapper.setAutoGrowNestedPaths(true);
         wrapper.setPropertyValue("address.street", "aa");
         wrapper.setPropertyValue("address.code", "123456");
@@ -78,8 +78,8 @@ public class TestDataBinder {
     }
 
     /**
-     * BeanWrapperÄ¬ÈÏÃ»ÓĞÌá¹©PropertyEditorÍê³ÉStringµ½DataµÄ×ª»»
-     * ´ÓÕâÀï¿ÉÒÔ¿´µ½£¬BeanWrapper³ıÁËÌá¹©¶ÔJavaBeanÕı³£µÄ·ÃÎÊ²Ù×÷£¬Í¬Ê±»¹¶ÔPropertyEditorµÄ¹ÜÀí¹¦ÄÜ¡£
+     * BeanWrapperé»˜è®¤æ²¡æœ‰æä¾›PropertyEditorå®ŒæˆStringåˆ°Dataçš„è½¬æ¢
+     * ä»è¿™é‡Œå¯ä»¥çœ‹åˆ°ï¼ŒBeanWrapperé™¤äº†æä¾›å¯¹JavaBeanæ­£å¸¸çš„è®¿é—®æ“ä½œï¼ŒåŒæ—¶è¿˜å¯¹PropertyEditorçš„ç®¡ç†åŠŸèƒ½ã€‚
      *
      */
     @Test
@@ -102,9 +102,9 @@ public class TestDataBinder {
     }
 
     /**
-     * ²âÊÔPropertyEditorManager×Ô¶¯ËÑË÷»úÖÆ
-     * SpringÖ»ÊÇÊµÏÖÁËPropertyEditorManagerµÄ²éÕÒ»úÖÆÖĞµÄµÚ¶ş¸ö¹æ·¶£¬
-     * µ«ÊÇÃ»ÓĞÊ¹ÓÃPropertyEditorManagerÀ´Íê³ÉÕæÕıµÄ²éÕÒÈÎÎñ¡£
+     * æµ‹è¯•PropertyEditorManagerè‡ªåŠ¨æœç´¢æœºåˆ¶
+     * Springåªæ˜¯å®ç°äº†PropertyEditorManagerçš„æŸ¥æ‰¾æœºåˆ¶ä¸­çš„ç¬¬äºŒä¸ªè§„èŒƒï¼Œ
+     * ä½†æ˜¯æ²¡æœ‰ä½¿ç”¨PropertyEditorManageræ¥å®ŒæˆçœŸæ­£çš„æŸ¥æ‰¾ä»»åŠ¡ã€‚
      */
     @Test
     public void testPropertyEditorManagerAutoSerach(){
@@ -116,7 +116,7 @@ public class TestDataBinder {
     }
 
     /**
-     * ÔÚPropertyEditorManagerÖĞ×¢²á¶ÔÓÚSpringÖĞÎŞĞ§µÄ¡£
+     * åœ¨PropertyEditorManagerä¸­æ³¨å†Œå¯¹äºSpringä¸­æ— æ•ˆçš„ã€‚
      */
     @Test
     public void testPropertyEditorManagerAutoSearch2(){
@@ -127,7 +127,7 @@ public class TestDataBinder {
 
 
     /**
-     * ×Ô¶¨ÒåBeanInfoĞÅÏ¢
+     * è‡ªå®šä¹‰BeanInfoä¿¡æ¯
      */
     @Test
     public void testCustomBeanInfo() throws Exception {
