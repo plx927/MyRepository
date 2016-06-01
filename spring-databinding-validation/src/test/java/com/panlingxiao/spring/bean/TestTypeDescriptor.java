@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.core.convert.TypeDescriptor;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +32,13 @@ public class TestTypeDescriptor {
         Assert.assertEquals(String.class,td1.getElementTypeDescriptor().getObjectType());
         Assert.assertEquals(null, td2.getElementTypeDescriptor());
 
+    }
 
-
-
-
-
+    @Test
+    public void testTypeDescriptor2(){
+        List<Integer> list = new ArrayList<Integer>();
+        TypeDescriptor td = TypeDescriptor.forObject(list);
+        Assert.assertEquals(true, td.getObjectType().isInstance(list));
     }
 
 

@@ -1,9 +1,8 @@
 package com.panlingxiao.spring.validation.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +11,8 @@ import java.util.List;
  */
 @Data
 public class Person {
+    @Id
+    private Integer id;
 
     private  String name;
     private int age;
