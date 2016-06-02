@@ -1,9 +1,9 @@
 package com.panlingxiao.spring.validation.editor;
 
 
-import com.panlingxiao.spring.validation.domain.Point;
+        import com.panlingxiao.spring.validation.domain.Point;
 
-import java.beans.PropertyEditorSupport;
+        import java.beans.PropertyEditorSupport;
 
 public class PointEditor extends PropertyEditorSupport {
     @Override
@@ -12,6 +12,9 @@ public class PointEditor extends PropertyEditorSupport {
         Point point = new Point();
         point.setX(Integer.parseInt(splits[0]));
         point.setY(Integer.parseInt(splits[1]));
+        /*
+         *需要将装换后的结果设置到Editor的value属性中，因为外部会通过getValue获取到转换的结果。
+         */
         setValue(point);
     }
 }

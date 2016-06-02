@@ -1,7 +1,5 @@
 package com.panlingxiao.spring.validation.domain;
 
-import lombok.Data;
-
 import java.beans.PropertyEditorSupport;
 
 /**

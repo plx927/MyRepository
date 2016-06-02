@@ -1,5 +1,6 @@
 package com.panlingxiao.spring.propertyeditor;
 
+import com.panlingxiao.spring.validation.domain.Circle;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -15,5 +16,7 @@ public class TestPropertyEditor {
     @Test
     public void testCustomEditorConfigurer() {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("prop-editor-app-context.xml");
+        Circle circle = applicationContext.getBean("circle", Circle.class);
+        System.out.println(circle.getPoint());
     }
 }

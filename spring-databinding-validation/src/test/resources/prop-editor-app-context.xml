@@ -4,7 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--
+        通过CustomEditorConfigurer这个BeanFactoryProcessor来完成自定义的ProperyEditor到IOC容器的添加功能
+    -->
     <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="propertyEditorRegistrars">
+            <bean class="com.panlingxiao.spring.validation.editor.MyPropertyEditorRegistrar"/>
+        </property>
+
+        <!--
         <property name="customEditors">
                 <map>
                     <entry key="java.util.Date">
@@ -12,9 +20,17 @@
                             <constructor-arg index="0" value="yyyy-MM-dd"/>
                         </bean>
                     </entry>
+
+                    <entry key="com.panlingxiao.spring.validation.domain.Point" value="com.panlingxiao.spring.validation.editor.PointEditor"/>
                 </map>
         </property>
+            -->
     </bean>
+
+    <bean class="com.panlingxiao.spring.validation.domain.Circle" id="circle">
+        <property name="point" value="1;2"/>
+    </bean>
+
 
 
 
