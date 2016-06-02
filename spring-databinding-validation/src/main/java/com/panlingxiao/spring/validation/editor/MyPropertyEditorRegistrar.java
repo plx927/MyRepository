@@ -10,6 +10,7 @@ import org.springframework.beans.PropertyEditorRegistry;
 public class MyPropertyEditorRegistrar implements PropertyEditorRegistrar {
     @Override
     public void registerCustomEditors(PropertyEditorRegistry registry) {
-        registry.registerCustomEditor(Point.class,"point",new PointEditor());
+        //将自己所定义的PropertyEditor注册到PropertyEditorRegistry中
+        registry.registerCustomEditor(Point.class,new PointEditor());
     }
 }

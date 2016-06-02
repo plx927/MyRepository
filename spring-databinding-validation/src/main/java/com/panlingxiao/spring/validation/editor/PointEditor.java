@@ -1,11 +1,16 @@
 package com.panlingxiao.spring.validation.editor;
 
 
-        import com.panlingxiao.spring.validation.domain.Point;
+import com.panlingxiao.spring.validation.domain.Point;
 
         import java.beans.PropertyEditorSupport;
 
 public class PointEditor extends PropertyEditorSupport {
+
+    public PointEditor(){
+        System.out.println("aa");
+    }
+
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
         String[] splits = text.split(";");
