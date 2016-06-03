@@ -1,5 +1,6 @@
 package com.panlingxiao.spring.conversion;
 
+import com.panlingxiao.spring.validation.domain.Circle;
 import com.panlingxiao.spring.validation.domain.Person;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,6 +21,17 @@ import java.util.*;
  * Created by panlingxiao on 2016/5/30.
  */
 public class TestConversion {
+
+    /**
+     * 测试自定义Converter
+     */
+    @Test
+    public void testConveter(){
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("conv-service-app-context.xml");
+        Circle circle = ctx.getBean("circle", Circle.class);
+        Assert.assertEquals(1,circle.getPoint().getX());
+        Assert.assertEquals(2,circle.getPoint().getY());
+    }
 
     @Test
     public void testConversionFactory() {

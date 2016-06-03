@@ -18,5 +18,6 @@ public class TestPropertyEditor {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("prop-editor-app-context.xml");
         Circle circle = applicationContext.getBean("circle", Circle.class);
         System.out.println(circle.getPoint());
+
     }
 }

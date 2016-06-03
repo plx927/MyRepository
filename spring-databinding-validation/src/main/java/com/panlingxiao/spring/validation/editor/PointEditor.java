@@ -8,7 +8,6 @@ import com.panlingxiao.spring.validation.domain.Point;
 public class PointEditor extends PropertyEditorSupport {
 
     public PointEditor(){
-        System.out.println("aa");
     }
 
     @Override
