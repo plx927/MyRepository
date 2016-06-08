@@ -6,13 +6,24 @@
 
        <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" id="conversionService">
               <property name="formatters">
-                     <bean class="com.panlingxiao.spring.validation.formatter.PointFormatter"/>
+                     <set>
+                            <bean class="com.panlingxiao.spring.validation.formatter.PointFormatter"/>
+                            <bean class="com.panlingxiao.spring.validation.converter.MyDateAnnotationFormatterFactory"/>
+                     </set>
+
               </property>
+
        </bean>
 
        <bean class="com.panlingxiao.spring.validation.domain.Circle" id="circle">
               <property name="point" value="1;2"/>
        </bean>
 
+
+       <!--
+       <bean class="com.panlingxiao.spring.validation.domain.Person" id="person">
+              <property name="birthday" value="2016-06-15 12:22:25"/>
+       </bean>
+       -->
 
 </beans>

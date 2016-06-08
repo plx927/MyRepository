@@ -1,6 +1,8 @@
 package com.panlingxiao.spring.validation.domain;
 
+import com.panlingxiao.spring.validation.annotation.MyDate;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Id;
 import java.util.Date;
@@ -13,9 +15,10 @@ import java.util.List;
 public class Person {
     @Id
     private Integer id;
-
     private  String name;
     private int age;
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @MyDate
     private Date birthday;
     private List<Integer> nums;
     private Boo boo;

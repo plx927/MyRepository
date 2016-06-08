@@ -20,9 +20,7 @@ public class TestBeanWrapper {
         BeanWrapperImpl wrapper = new BeanWrapperImpl(person);
         wrapper.setPropertyValue("id", "1");
         Assert.assertEquals(1, person.getId().intValue());
-
         wrapper.setAutoGrowNestedPaths(true);
-
         wrapper.setPropertyValue("nums[0]", "123");
         wrapper.setPropertyValue("nums[1]", "123");
         System.out.println(person.getNums());
@@ -37,4 +35,6 @@ public class TestBeanWrapper {
         wrapper.setPropertyValue("foo","1;2");
         System.out.println(boo.getFoo());
     }
+
+
 }

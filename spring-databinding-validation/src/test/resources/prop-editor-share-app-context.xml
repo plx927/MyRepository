@@ -4,16 +4,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-       <!-- 这里必须制定ID为conversionService -->
-       <bean class="org.springframework.context.support.ConversionServiceFactoryBean" id="conversionService">
-               <!--自定义的Converter会被ConversionService所管理,然后被PropertyEditorRegistry所使用 -->
-               <property name="converters">
-                      <bean class="com.panlingxiao.spring.validation.converter.PointConverter"/>
-               </property>
+       <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+              <property name="customEditors">
+                     <map>
+                            <entry key="com.panlingxiao.spring.validation.domain.Point" >
+                                   <bean class="com.panlingxiao.spring.validation.editor.PointEditor"/>
+                            </entry>
+                     </map>
+              </property>
        </bean>
 
        <bean class="com.panlingxiao.spring.validation.domain.Circle" id="circle">
               <property name="point" value="1;2"/>
        </bean>
-
 </beans>

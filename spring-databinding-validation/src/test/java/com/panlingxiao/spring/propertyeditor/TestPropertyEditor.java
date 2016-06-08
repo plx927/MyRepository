@@ -3,6 +3,7 @@ package com.panlingxiao.spring.propertyeditor;
 import com.panlingxiao.spring.validation.domain.Boo;
 import com.panlingxiao.spring.validation.domain.Circle;
 import com.panlingxiao.spring.validation.domain.Foo;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -31,6 +32,29 @@ public class TestPropertyEditor {
         Boo boo = ctx.getBean("boo", Boo.class);
         System.out.println("foo.x: "+boo.getFoo().getX()+",foo.y: "+boo.getFoo().getY());
     }
+
+    /**
+     * 测试基于{@link org.springframework.beans.PropertyEditorRegistrar}的PropertyEditor的注册
+     */
+    @Test
+    public void testPropertyEditorByPropertyRegistrar(){
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("prop-registrar-app-context.xml");
+        Circle circle = ctx.getBean("circle", Circle.class);
+        Assert.assertEquals(1,circle.getPoint().getX());
+        Assert.assertEquals(2, circle.getPoint().getY());
+    }
+
+    /**
+     * 测试全局共享的ShareProeprtyEditor
+     */
+    @Test
+    public  void testSharePropertyEditor(){
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("prop-editor-share-app-context.xml");
+        Circle circle = ctx.getBean("circle", Circle.class);
+        Assert.assertEquals(1,circle.getPoint().getX());
+        Assert.assertEquals(2, circle.getPoint().getY());
+    }
+
 
 
 }

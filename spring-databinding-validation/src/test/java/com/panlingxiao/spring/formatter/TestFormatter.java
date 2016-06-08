@@ -1,6 +1,7 @@
 package com.panlingxiao.spring.formatter;
 
 import com.panlingxiao.spring.validation.domain.Circle;
+import com.panlingxiao.spring.validation.domain.Person;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -9,13 +10,22 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.format.datetime.DateFormatter;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Locale;
 
 /**
  * Created by panlingxiao on 2016/6/1.
  */
 public class TestFormatter {
+
+    @Test
+    public void testDateFormat(){
+        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+        String value = format.format(new Date());
+        System.out.println(value);
+    }
 
     /**
      * 默认格式化为严格模式,因此无法格式化12:99:22,需要设置为lenient为true才可以。
@@ -29,6 +39,8 @@ public class TestFormatter {
         formatter.parse("2015-12-12 12:99:22", Locale.getDefault());
     }
 
+
+
     @Test
     public void testFormattingService() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("conv-format-app-context.xml");
@@ -41,4 +53,9 @@ public class TestFormatter {
     }
 
 
+    @Test
+    public void testDateTimeFormatter(){
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("conv-format-app-context.xml");
+        ctx.getBean("person", Person.class);
+    }
 }
