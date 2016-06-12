@@ -4,7 +4,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
        <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
             <property name="propertyEditorRegistrars">
-                   <bean class="com.panlingxiao.spring.validation.editor.MyPropertyEditorRegistrar"/>
+                    <array>
+                        <bean class="com.panlingxiao.spring.validation.editor.MyPropertyEditorRegistrar"/>
+                    </array>
             </property>
        </bean>
 

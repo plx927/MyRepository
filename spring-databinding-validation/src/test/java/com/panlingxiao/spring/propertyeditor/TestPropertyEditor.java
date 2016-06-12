@@ -23,6 +23,7 @@ public class TestPropertyEditor {
         System.out.println(circle.getPoint());
     }
 
+
     /**
      * 通过约定机制来自动查询PropertyEditor完成类型转换
      */

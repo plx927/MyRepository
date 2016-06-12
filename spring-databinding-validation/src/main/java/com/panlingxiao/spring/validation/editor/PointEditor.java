@@ -5,6 +5,9 @@ import com.panlingxiao.spring.validation.domain.Point;
 
         import java.beans.PropertyEditorSupport;
 
+/**
+ * 自定义PropertyEditor,完成String到Point的转换
+ */
 public class PointEditor extends PropertyEditorSupport {
 
     public PointEditor(){

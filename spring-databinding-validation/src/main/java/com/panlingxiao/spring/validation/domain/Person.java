@@ -17,9 +17,8 @@ public class Person {
     private Integer id;
     private  String name;
     private int age;
-    //@DateTimeFormat(pattern = "yyyy-MM-dd")
-    @MyDate
     private Date birthday;
     private List<Integer> nums;
     private Boo boo;
+    private Point point;
 }
