@@ -4,17 +4,16 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
 /**
  * Created by panlingxiao on 2016/5/6.
- *
+ * 无锁转账的实现
  */
 public class UnlockTransferMoneyTest {
 
     static  class TransferAccountService{
-
         public void transfer(Account src,Account dest,long money){
             final long balance = src.getBlance();
             if(balance>=money){
-                if(src.decrMoney(balance,balance-money)){
-                    dest.incrMoney(money);
+                if(src.decrBalance(balance, balance - money)){
+                    dest.incrBalance(money);
                 }else{
                     transfer(src,dest,money);
                 }
@@ -28,6 +27,7 @@ public class UnlockTransferMoneyTest {
 
         private  volatile long balance = 0L;
         private AtomicLongFieldUpdater blanceUpdater =  AtomicLongFieldUpdater.newUpdater(Account.class,"balance");
+        //账户id
         private String id;
 
         public Account(String id,long balance){
@@ -39,12 +39,12 @@ public class UnlockTransferMoneyTest {
         public long getBlance(){
             return balance;
         }
-
-        public boolean decrMoney(long expect, long update){
+        //扣取余额
+        public boolean decrBalance(long expect, long update){
             return blanceUpdater.compareAndSet(this,expect,update);
         }
-
-        public long incrMoney(long money) {
+        //添加余额
+        public long incrBalance(long money) {
             return blanceUpdater.addAndGet(this, money);
         }
 
@@ -60,7 +60,6 @@ public class UnlockTransferMoneyTest {
         final Account a3 = new Account("C",300);
 
         final TransferAccountService transferAccountService = new TransferAccountService();
-
 
         new Thread(){
             @Override
