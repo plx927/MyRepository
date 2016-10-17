@@ -1,7 +1,5 @@
 package com.panlingxiao.concurrency.synchronier;
 
-import javafx.concurrent.Worker;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
