@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--定义DefaultConversionService,并且添加自己的Converter来完成转换-->
+    <bean class="org.springframework.context.support.ConversionServiceFactoryBean" id="conversionService">
+        <property name="converters">
+            <bean class="com.panlingxiao.spring.validation.converter.MyCustomStringToDateConverter"/>
+        </property>
+    </bean>
+
+    <bean class="com.panlingxiao.spring.validation.domain.Person">
+        <property name="birthday" value="2016-06-01 12:23:45"/>
+    </bean>
+
+</beans>
