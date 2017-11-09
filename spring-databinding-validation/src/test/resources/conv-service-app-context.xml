@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+       <!-- 这里必须制定ID为conversionService -->
+       <bean class="org.springframework.context.support.ConversionServiceFactoryBean" id="conversionService">
+               <!--自定义的Converter会被ConversionService所管理,然后被PropertyEditorRegistry所使用 -->
+               <property name="converters">
+                      <bean class="com.panlingxiao.spring.validation.converter.PointConverter"/>
+               </property>
+       </bean>
+
+       <bean class="com.panlingxiao.spring.validation.domain.Circle" id="circle">
+              <property name="point" value="1;2"/>
+       </bean>
+
+</beans>

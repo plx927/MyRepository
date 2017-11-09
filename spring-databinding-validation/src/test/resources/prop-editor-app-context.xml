@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        通过CustomEditorConfigurer这个BeanFactoryProcessor来完成自定义的ProperyEditor到IOC容器的添加功能
+    -->
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+                <map>
+                    <entry key="com.panlingxiao.spring.validation.domain.Point" value="com.panlingxiao.spring.validation.editor.PointEditor"/>
+                </map>
+        </property>
+    </bean>
+
+    <bean class="com.panlingxiao.spring.validation.domain.Circle" id="circle">
+        <property name="point" value="1;2"/>
+    </bean>
+
+
+
+
+</beans>
